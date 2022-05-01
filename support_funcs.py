@@ -4,10 +4,21 @@ from os import listdir
 from pathlib import Path
 
 
-def pureSongName(songName):
-    #if purificationMode != None:
-    #    songName = songName.split(splitValue)[splitIndex]
+def purifySongName(songName, purificationParams):
+    if purificationParams["purificationMode"] == PurificationMode.splitBySymbol:
+        songName = songName.split(purificationParams["splitSymbol"])[purificationParams["splitIndex"]]
+        
+    elif purificationParams["purificationMode"] == PurificationMode.removeClutter:
+        songName = songName.split()
+        for i in range(len(songName)):
+            if i in purificationParams["clutterIndexes"]:
+                songName[i] = ''
+        ' '.join(songName)
+    elif purificationParams["purificationMode"] == PurificationMode.sliceOffEnds:
+        songName = songName.split()[purificationParams["leftEnd"] : purificationParams["rightEnd"]]
+        songName = ' '.join(songName)
 
+    print(songName)
     return songName
 
 
@@ -18,20 +29,7 @@ def getFilesFromDir(songDirName):
     return songFiles
 
 
-def capitalizeAllWords(songName):
-    songName = songName.split()
-
-    for i in songName:
-        i.capitalize()
-
-    return ' '.join(songName)
-
-
-class BugStatus(Enum):
-    new = 7
-    incomplete = 6
-    invalid = 5
-    wont_fix = 4
-    in_progress = 3
-    fix_committed = 2
-    fix_released = 1
+class PurificationMode(Enum):
+    splitBySymbol = 1
+    removeClutter = 2
+    sliceOffEnds  = 3

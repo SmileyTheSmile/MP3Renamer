@@ -14,7 +14,7 @@ def main():
     for i in songFiles:
         if i[1] == ".mp3":
             params["songParams"]["filename"] = ''.join(i)
-            params["songParams"]["title"] = capitalizeAllWords(pureSongName(i[0]))
+            params["songParams"]["title"] = purifySongName(i[0], params["purificationParams"]).title()
             
             changeSongAttributes(params["songParams"])
     

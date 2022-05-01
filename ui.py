@@ -1,4 +1,5 @@
 import tkinter
+from support_funcs import PurificationMode
 
 
 def getParamsFromUI():
@@ -9,7 +10,15 @@ def getParamsFromUI():
     year = "2004"
     genre = "Orchestral"
     album_artist = None
+    album_artist = None
     track_num = None
+    
+    purificationMode = PurificationMode.sliceOffEnds
+    splitSymbol = None
+    splitIndex = None
+    clutterIndexes = None
+    leftEnd = 1
+    rightEnd = None
     
     params = {
         "songDirName": songDirName,
@@ -20,7 +29,15 @@ def getParamsFromUI():
             "genre": genre,
             "album_artist": album_artist,
             "track_num": track_num
-            }
+        },
+        "purificationParams": {
+            "purificationMode": purificationMode,
+            "splitSymbol": splitSymbol,
+            "splitIndex": splitIndex,
+            "clutterIndexes": clutterIndexes,
+            "leftEnd": leftEnd,
+            "rightEnd": rightEnd
         }
+    }
     
     return params

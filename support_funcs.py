@@ -4,6 +4,7 @@ from os import listdir, rename
 from pathlib import Path
 from music import *
 
+
 SUPPORTED_EXTENTIONS = [".mp3"]
 
 

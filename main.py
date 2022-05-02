@@ -4,12 +4,16 @@ from os import chdir
 
 
 def main():
-    params = get_params_from_UI()
+    main_window = Window("MP3Renamer", '800x200')
     
-    song_files = get_files_from_directory(params["song_dir_name"])
+    main_window.start()
+    
+    #params = get_params_from_UI()
+    
+    #song_files = get_files_from_directory(params["song_dir_name"])
 
-    chdir(params["song_dir_name"])
+    #chdir(params["song_dir_name"])
     
-    apply_params_to_songs(song_files, params)
+    #apply_params_to_songs(song_files, params)
     
 main()

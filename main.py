@@ -1,21 +1,15 @@
-from music import  *
 from ui import *
 from support_funcs import *
-from os import chdir, getcwd
+from os import chdir
 
 
 def main():
-    params = getParamsFromUI()
+    params = get_params_from_UI()
     
-    songFiles = getFilesFromDir(params["songDirName"])
+    song_files = get_files_from_directory(params["song_dir_name"])
+
+    chdir(params["song_dir_name"])
     
-    chdir(params["songDirName"])
-    
-    for i in songFiles:
-        if i[1] == ".mp3":
-            params["songParams"]["filename"] = ''.join(i)
-            params["songParams"]["title"] = purifySongName(i[0], params["purificationParams"]).title()
-            
-            changeSongAttributes(params["songParams"])
+    apply_params_to_songs(song_files, params)
     
 main()

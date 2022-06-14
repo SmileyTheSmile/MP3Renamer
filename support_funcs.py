@@ -35,7 +35,7 @@ def slice_off_ends(song_title, purification_params):
 def get_song_files_from_directory(file_params):
     song_directory = Path(file_params["song_directory"]).resolve()
     files = listdir(song_directory)
-    return get_valid_files(files, song_directory), file_params["supported_extensions"]
+    return get_valid_files(files, song_directory)
 
 
 def get_supported_files(files, supported_extensions):

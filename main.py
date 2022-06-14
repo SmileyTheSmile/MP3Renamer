@@ -10,9 +10,9 @@ def main():
     params = get_params_from_UI()
 
     chdir(params["file_params"]["song_directory"])
-    
-    files = get_song_files_from_directory(params["file_params"])
-    
-    apply_params_to_songs(files, params)
+
+    song_files = get_song_files_from_directory(params["file_params"])
+
+    apply_params_to_songs(song_files, params)
     
 main()

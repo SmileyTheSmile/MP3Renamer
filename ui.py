@@ -8,15 +8,16 @@ from os import getcwd
 
 def get_params_from_UI():
     song_dir_name = "E:\My Stuff\My Programs\MP3Renamer\songs"
-    rename_files = True
+    supported_extensions = [".mp3"]
+    rename_files = False
 
     artist = "Joe Hisaishi"
     album = "Kiki's Delivery Service"
-    year = 1989
+    date = "1989"
     genre = "Orchestral"
-    album_artist = None
-    album_artist = None
-    track_num = None
+    albumartist = None
+    albumartist = None
+    tracknum = None
 
     purification_mode = PurificationMode.none
     split_symbol = "- "
@@ -26,15 +27,18 @@ def get_params_from_UI():
     right_end = None
 
     params = {
-        "song_dir_name": song_dir_name,
-        "rename_files": rename_files,
+        "file_params": {
+            "song_directory": song_dir_name,
+            "supported_extensions": supported_extensions,
+            "rename_files": rename_files,
+        },
         "song_params": {
             "artist": artist,
             "album": album,
-            "year": year,
+            "date": date,
             "genre": genre,
-            "album_artist": album_artist,
-            "track_num": track_num
+            "albumartist": albumartist,
+            "tracknumber": tracknum
         },
         "purification_params": {
             "purification_mode": purification_mode,
@@ -134,16 +138,16 @@ class Window():
         self.selected_purification_mode = IntVar()
         self.split_by_symbol_radio = Radiobutton(self.window,
                                                 text="Separate the junk with a symbol",
-                                                value=PurificationMode.split_by_symbol, 
+                                                value=PurificationMode.splitBySymbol, 
                                                 command=self.enable_purification_menu_1,
                                                 variable=self.selected_purification_mode)
         self.remove_clutter_radio = Radiobutton(self.window,
                                                 text="Remove junk words by index",
-                                                value=PurificationMode.remove_clutter,
+                                                value=PurificationMode.removeSymbolsAtIndexes,
                                                 variable=self.selected_purification_mode)
         self.slice_off_ends_radio = Radiobutton(self.window,
                                                 text="Slice off words from both ends",
-                                                value=PurificationMode.slice_off_ends,
+                                                value=PurificationMode.sliceOffEnds,
                                                 variable=self.selected_purification_mode)
         self.split_by_symbol_radio.grid(column=0, row=purification_mode_pos)
         self.remove_clutter_radio.grid(column=1, row=purification_mode_pos)

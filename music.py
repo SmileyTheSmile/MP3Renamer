@@ -1,16 +1,29 @@
-from eyed3 import load
+from mutagen.mp3 import MP3
+from mutagen.easyid3 import EasyID3
 
 
 def change_song_attributes(song_params):
-    audiofile = load(song_params["filename"])
-    songTag = audiofile.tag
+    song = MP3(song_params["filename"], ID3=EasyID3)
 
-    songTag.title = song_params["title"]
-    songTag.artist = song_params["artist"]
-    songTag.album = song_params["album"]
-    songTag.year = song_params["year"]
-    songTag.genre = song_params["genre"]
-    songTag.album_artist = song_params["album_artist"]
-    songTag.track_num = song_params["track_num"]
-
-    songTag.save()
+    try: song["title"] = song_params["title"]
+    except: song["title"] = ""
+        
+    try: song["artist"] = song_params["artist"]
+    except: song["title"] = ""
+        
+    try: song["album"] = song_params["album"]
+    except: song["title"] = ""
+        
+    try: song["date"] = song_params["date"]
+    except: song["title"] = ""
+    
+    try: song["genre"] = song_params["genre"]
+    except: song["title"] = ""
+    
+    try: song["albumartist"] = song_params["albumartist"]
+    except: song["albumartist"] = ""
+    
+    try: song["tracknumber"] = song_params["tracknumber"]
+    except: song["title"] = ""
+    
+    song.save()

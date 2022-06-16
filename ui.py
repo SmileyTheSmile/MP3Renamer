@@ -53,41 +53,27 @@ def get_params_from_UI():
     return params
 
 class Window():
-    def __init__(self, name, resolution):
+    def __init__(self, name, resolution, resizable):
         self.name = name
         self.resolution = resolution
         
-        self.window = self._setup_window(name, self.resolution)
+        ui_factory = UIFactory()
+        self.window = ui_factory.window(name, resolution, resizable)
+        self.toolbar = ui_factory.toolbar(self.window)
         
-        self.menu = self._setup_menu(self.window)
-        self.window.config(menu=self.menu)
+        self.window.config(menu=self.toolbar)
         
     def start(self):
         self._setup_layout()
         self.window.mainloop()
-
-
-    def _setup_window(self, name, resolution):
-        window = Tk()
-        window.title(name)
-        window.geometry(resolution)
-        
-        return window
-    
-    def _setup_menu(self, window):
-        menu = Menu(window)
-
-        new_item = Menu(menu, tearoff=0)
-        new_item.add_command(label='Новый')
-        new_item.add_separator()
-        new_item.add_command(label='Изменить')
-
-        menu.add_cascade(label='Файл', menu=new_item)
-
-        return menu
     
     def _setup_layout(self):
+        ui_factory = UIFactory()
+        
         font = ("Arial Bold", 12)
+        
+        self.selected_purification_mode = IntVar(value=0)
+        self.rename_files_bool = BooleanVar(value=True)
         
         file_location_pos = 0
         artist_pos = 1
@@ -96,98 +82,127 @@ class Window():
         genre_pos = 4
         purification_mode_pos = 5
         start_button_pos = 6
-        
-        self.song_dir_desc = self._setup_desc((0, file_location_pos),
-                                                    "Enter the song folder location",
-                                                    font)
-        self.song_dir_input = self._setup_input(50,
-                                                    (1, file_location_pos),
-                                                    getcwd())
 
-        self.rename_files_bool = BooleanVar()
-        self.rename_files_bool.set(True)
-        self.rename_files_input = Checkbutton(self.window,
-                                                text="Rename files to their generated titles",
-                                                var=self.rename_files_bool)
-        self.rename_files_input.grid(column=2, row=file_location_pos)
+        self.song_dir_input = ui_factory.input_box((1, file_location_pos), 50, getcwd())
+        self.genre_input = ui_factory.input_box((1, genre_pos), 50)
+        self.artist_input = ui_factory.input_box((1, artist_pos), 50)
+        self.album_input = ui_factory.input_box((1, album_pos), 50)
+        self.year_input = ui_factory.input_box((1, year_pos), 50)
         
-        self.artist_desc = self._setup_desc((0, artist_pos),
+        self.song_dir_desc = ui_factory.label((0, file_location_pos),
+                                            "Enter the song folder location",
+                                            font,
+                                            25)
+        self.artist_desc = ui_factory.label((0, artist_pos),
                                             "Enter the all the album artists",
-                                            font)
-        self.artist_input = self._setup_input(50,
-                                            (1, artist_pos))
-
-        self.album_desc = self._setup_desc((0, album_pos),
+                                            font,
+                                            25)
+        self.album_desc = ui_factory.label((0, album_pos),
                                             "Enter the all the album names",
-                                            font)
-        self.album_input = self._setup_input(50,
-                                            (1, album_pos))
-
-        self.year_desc = self._setup_desc((0, year_pos),
+                                            font,
+                                            25)
+        self.year_desc = ui_factory.label((0, year_pos),
                                             "Enter the all the album years",
-                                            font)
-        self.year_input = self._setup_input(50,
-                                            (1, year_pos))
-
-        self.genre_desc = self._setup_desc((0, genre_pos),
+                                            font,
+                                            25)
+        self.genre_desc = ui_factory.label((0, genre_pos),
                                             "Enter the all the album genres",
-                                            font)
-        self.genre_input = self._setup_input(50,
-                                            (1, genre_pos))
+                                            font,
+                                            25)
+        
+        self.rename_files_check = ui_factory.check_button((2, file_location_pos),
+                                                        "Rename files to their generated titles",
+                                                        self.rename_files_bool)
 
-        self.selected_purification_mode = IntVar()
-        self.split_by_symbol_radio = Radiobutton(self.window,
-                                                text="Separate the junk with a symbol",
-                                                value=PurificationMode.splitBySymbol, 
-                                                command=self.enable_purification_menu_1,
-                                                variable=self.selected_purification_mode)
-        self.remove_clutter_radio = Radiobutton(self.window,
-                                                text="Remove junk words by index",
-                                                value=PurificationMode.removeSymbolsAtIndexes,
-                                                variable=self.selected_purification_mode)
-        self.slice_off_ends_radio = Radiobutton(self.window,
-                                                text="Slice off words from both ends",
-                                                value=PurificationMode.sliceOffEnds,
-                                                variable=self.selected_purification_mode)
-        self.split_by_symbol_radio.grid(column=0, row=purification_mode_pos)
-        self.remove_clutter_radio.grid(column=1, row=purification_mode_pos)
-        self.slice_off_ends_radio.grid(column=2, row=purification_mode_pos)
-    
-        self.start_button = Button(self.window, 
-                                    text="Rename files", 
-                                    command=self.finish_input)
-        self.start_button.grid(column=1, row=start_button_pos)
-    
-    def _setup_input(self, width, pos, text=None, focus=False):
-        input = Entry(self.window, width=width)
-        input.grid(column=pos[0], row=pos[1])
+        self.split_by_symbol_radio = ui_factory.radio_button((0, purification_mode_pos),
+                                                "Separate the junk with a symbol",
+                                                PurificationMode.splitBySymbol, 
+                                                self.enable_purification_menu_1,
+                                                self.selected_purification_mode)
+        self.remove_symbols_at_indexes_radio = ui_factory.radio_button((1, purification_mode_pos),
+                                                "Remove junk words by index",
+                                                PurificationMode.removeSymbolsAtIndexes,
+                                                self.selected_purification_mode)
+        self.slice_off_ends_radio = ui_factory.radio_button((2, purification_mode_pos),
+                                                "Slice off words from both ends",
+                                                PurificationMode.sliceOffEnds,
+                                                self.selected_purification_mode)
         
+        self.start_button = ui_factory.button((0, start_button_pos), 
+                                                "Rename files", 
+                                                self._finish_input)
+
+    def enable_purification_menu_1(self):
+        pass
+
+    def _finish_input(self):
+        pass
+    
+    
+class UIFactory():
+    def window(self, name, resolution, resizable):
+        window = Tk()
+        window.title(name)
+        window.geometry(resolution)
+        window.resizable(width=resizable, height=resizable)
+
+        return window
+    
+    def input_box(self, pos, width, text=None, focus=False):
+        input_box = Entry(width=width)
+        input_box.grid(column=pos[0], row=pos[1])
+
         if text != None:
-            input.insert(0, text)
+            input_box.insert(0, text)
         if focus:
-            input.focus()
+            input_box.focus()
+
+        return input_box
+
+    def label(self, pos, text, font, width):
+        label = Label(text=text, font=font,
+                    justify=LEFT, anchor="w", width=width)
+        label.grid(column=pos[0], row=pos[1])
         
-        return input
+        return label
+
+    def toolbar(self, window):
+        toolbar = Menu(window)
+        new_item = Menu(toolbar, tearoff=0)
+        new_item.add_command(label='Новый')
+        new_item.add_separator()
+        new_item.add_command(label='Изменить')
+
+        toolbar.add_cascade(label='Файл', menu=new_item)
         
-    def _setup_desc(self, pos, text, font):
-        desc_label = Label(self.window,
-                                text=text,
-                                font=font,
-                                justify=LEFT,
-                                anchor="w",
-                                width=25)
-        desc_label.grid(column=pos[0], row=pos[1])
-        
-        return desc_label
+        return toolbar
+
+    def button(self, pos, text, command=None):
+        button = Button(text=text, command=command)
+        button.grid(column=pos[0], row=pos[1])
+
+        return button
     
-    def _ignore(self):
+    def radio_button(self, pos, text, value, target_variable, command=None):
+        radio_button = Radiobutton(text=text, value=value, command=command, variable=target_variable)
+        radio_button.grid(column=pos[0], row=pos[1])
+
+        return radio_button
+    
+    def check_button(self, pos, text, target_variable, command=None):
+        check_button = Checkbutton(text=text, command=command, variable=target_variable)
+        check_button.grid(column=pos[0], row=pos[1])
+
+        return check_button
+
+    def _unused_stuff(self):
         txt2 = Entry(self.window, width=10, state='disabled')
 
         combo = Combobox(self.window)
-        combo['values'] = ("Split off the clutter through a ", 2, 3, 4, 5, "Текст")
+        combo['values'] = (
+            "Split off the clutter through a ", 2, 3, 4, 5, "Текст")
         combo.current(1)
         combo.grid(column=0, row=0)
-
 
         txt = scrolledtext.ScrolledText(self.window, width=40, height=10)
         txt.grid(column=0, row=0)
@@ -197,48 +212,3 @@ class Window():
 
         messagebox.showwarning('Заголовок', 'Текст')
         messagebox.showerror('Заголовок', 'Текст')
-
-        self.window.mainloop()
-
-    def enable_purification_menu_1(self):
-        pass
-
-    def finish_input(self):
-        pass
-
-    def get_params_from_UI(self):
-        song_dir_name = self.song_dir_input.get()
-        rename_files = self.rename_files_bool.get()
-
-        artist = self.artist_input.get()
-        album = self.album_input.get()
-        year = self.year_input.get()
-        genre = self.genre_input.get()
-        
-        purification_mode = self.selected_purification_mode.get()
-        split_symbol = None
-        split_index = None
-        clutter_indexes = None
-        left_end = 1
-        right_end = None
-
-        params = {
-            "song_dir_name": song_dir_name,
-            "rename_files": rename_files,
-            "song_params": {
-                "artist": artist,
-                "album": album,
-                "year": year,
-                "genre": genre
-            },
-            "purification_params": {
-                "purification_mode": purification_mode,
-                "split_symbol": split_symbol,
-                "split_index": split_index,
-                "clutter_indexes": clutter_indexes,
-                "left_end": left_end,
-                "right_end": right_end
-            }
-        }
-
-        return params

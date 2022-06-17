@@ -83,52 +83,52 @@ class Window():
         purification_mode_pos = 5
         start_button_pos = 6
 
-        self.song_dir_input = ui_factory.input_box((1, file_location_pos), 50, getcwd())
-        self.genre_input = ui_factory.input_box((1, genre_pos), 50)
-        self.artist_input = ui_factory.input_box((1, artist_pos), 50)
-        self.album_input = ui_factory.input_box((1, album_pos), 50)
-        self.year_input = ui_factory.input_box((1, year_pos), 50)
+        self.song_dir_input = ui_factory.input_box((1, file_location_pos), True, 50, getcwd())
+        self.genre_input = ui_factory.input_box((1, genre_pos), True, 50)
+        self.artist_input = ui_factory.input_box((1, artist_pos), True, 50)
+        self.album_input = ui_factory.input_box((1, album_pos), True, 50)
+        self.year_input = ui_factory.input_box((1, year_pos), True, 50)
         
-        self.song_dir_desc = ui_factory.label((0, file_location_pos),
+        self.song_dir_desc = ui_factory.label((0, file_location_pos), True,
                                             "Enter the song folder location",
                                             font,
                                             25)
-        self.artist_desc = ui_factory.label((0, artist_pos),
+        self.artist_desc = ui_factory.label((0, artist_pos), True,
                                             "Enter the all the album artists",
                                             font,
                                             25)
-        self.album_desc = ui_factory.label((0, album_pos),
+        self.album_desc = ui_factory.label((0, album_pos), True,
                                             "Enter the all the album names",
                                             font,
                                             25)
-        self.year_desc = ui_factory.label((0, year_pos),
+        self.year_desc = ui_factory.label((0, year_pos), True,
                                             "Enter the all the album years",
                                             font,
                                             25)
-        self.genre_desc = ui_factory.label((0, genre_pos),
+        self.genre_desc = ui_factory.label((0, genre_pos), True,
                                             "Enter the all the album genres",
                                             font,
                                             25)
         
-        self.rename_files_check = ui_factory.check_button((2, file_location_pos),
+        self.rename_files_check = ui_factory.check_button((2, file_location_pos), True,
                                                         "Rename files to their generated titles",
                                                         self.rename_files_bool)
 
-        self.split_by_symbol_radio = ui_factory.radio_button((0, purification_mode_pos),
+        self.split_by_symbol_radio = ui_factory.radio_button((0, purification_mode_pos), True,
                                                 "Separate the junk with a symbol",
                                                 PurificationMode.splitBySymbol, 
                                                 self.enable_purification_menu_1,
                                                 self.selected_purification_mode)
-        self.remove_symbols_at_indexes_radio = ui_factory.radio_button((1, purification_mode_pos),
+        self.remove_symbols_at_indexes_radio = ui_factory.radio_button((1, purification_mode_pos), True,
                                                 "Remove junk words by index",
                                                 PurificationMode.removeSymbolsAtIndexes,
                                                 self.selected_purification_mode)
-        self.slice_off_ends_radio = ui_factory.radio_button((2, purification_mode_pos),
+        self.slice_off_ends_radio = ui_factory.radio_button((2, purification_mode_pos), True,
                                                 "Slice off words from both ends",
                                                 PurificationMode.sliceOffEnds,
                                                 self.selected_purification_mode)
         
-        self.start_button = ui_factory.button((0, start_button_pos), 
+        self.start_button = ui_factory.button((0, start_button_pos), True,
                                                 "Rename files", 
                                                 self._finish_input)
 
@@ -137,6 +137,12 @@ class Window():
 
     def _finish_input(self):
         pass
+
+    def _enable_element(self, element):
+        element.pack()
+        
+    def _disable_element(self, element):
+        element.pack_forget()
     
     
 class UIFactory():
@@ -148,24 +154,6 @@ class UIFactory():
 
         return window
     
-    def input_box(self, pos, width, text=None, focus=False):
-        input_box = Entry(width=width)
-        input_box.grid(column=pos[0], row=pos[1])
-
-        if text != None:
-            input_box.insert(0, text)
-        if focus:
-            input_box.focus()
-
-        return input_box
-
-    def label(self, pos, text, font, width):
-        label = Label(text=text, font=font,
-                    justify=LEFT, anchor="w", width=width)
-        label.grid(column=pos[0], row=pos[1])
-        
-        return label
-
     def toolbar(self, window):
         toolbar = Menu(window)
         new_item = Menu(toolbar, tearoff=0)
@@ -176,22 +164,53 @@ class UIFactory():
         toolbar.add_cascade(label='Файл', menu=new_item)
         
         return toolbar
+    
+    def input_box(self, pos, enabled, width, text=None, focus=False):
+        input_box = Entry(width=width)
+        input_box.grid(column=pos[0], row=pos[1])
 
-    def button(self, pos, text, command=None):
+        if not enabled:
+            input_box.pack_forget()
+        if text != None:
+            input_box.insert(0, text)
+        if focus:
+            input_box.focus()
+
+        return input_box
+
+    def label(self, pos, enabled, text, font, width):
+        label = Label(text=text, font=font, justify=LEFT, anchor="w", width=width)
+        label.grid(column=pos[0], row=pos[1])
+
+        if not enabled:
+            label.pack_forget()
+        
+        return label
+
+    def button(self, pos, enabled, text, command=None):
         button = Button(text=text, command=command)
         button.grid(column=pos[0], row=pos[1])
 
+        if not enabled:
+            button.pack_forget()
+
         return button
     
-    def radio_button(self, pos, text, value, target_variable, command=None):
+    def radio_button(self, pos, enabled, text, value, target_variable, command=None):
         radio_button = Radiobutton(text=text, value=value, command=command, variable=target_variable)
         radio_button.grid(column=pos[0], row=pos[1])
+        
+        if not enabled:
+            radio_button.pack_forget()
 
         return radio_button
     
-    def check_button(self, pos, text, target_variable, command=None):
+    def check_button(self, pos, enabled, text, target_variable, command=None):
         check_button = Checkbutton(text=text, command=command, variable=target_variable)
         check_button.grid(column=pos[0], row=pos[1])
+
+        if not enabled:
+            check_button.pack_forget()
 
         return check_button
 

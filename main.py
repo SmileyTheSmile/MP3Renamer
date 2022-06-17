@@ -14,6 +14,6 @@ def main():
     song_files = get_files_from_directory(params["file_params"]["song_directory"],
                                         params["file_params"]["supported_extensions"])
 
-    apply_params_to_songs(song_files, params)
+    #apply_params_to_songs(song_files, params)
     
 main()

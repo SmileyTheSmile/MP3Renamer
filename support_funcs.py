@@ -2,7 +2,8 @@ from enum import Enum
 from os.path import isfile, splitext, join
 from os import listdir, rename
 from pathlib import Path
-from music import *
+from mutagen.mp3 import MP3
+from mutagen.easyid3 import EasyID3
 
 
 def purify_song_title(song_title, purification_params):
@@ -60,11 +61,55 @@ def apply_params_to_songs(song_files, params):
                         params["song_params"]["title"] + file_extension)
 
 
-def capitalize_all_words(song_name):
-    song_name = song_name.split()
-    for i in range(len(song_name)):
-        song_name[i] = song_name[i][0].upper() + song_name[i][1:]
-    return ' '.join(song_name)
+def capitalize_all_words(string):
+    """Capitalizes every word in a sentence."""
+        
+    string = string.split()
+    for i in range(len(string)):
+        string[i] = "{}{}".format(string[i][0].upper(), string[i][1:])
+        #string[i] = string[i][0].upper() + string[i][1:]
+    return ' '.join(string)
+
+
+def change_song_attributes(song_params):
+    song = MP3(song_params["filename"], ID3=EasyID3)
+
+    try:
+        song["title"] = song_params["title"]
+    except:
+        song["title"] = ""
+
+    try:
+        song["artist"] = song_params["artist"]
+    except:
+        song["artist"] = ""
+
+    try:
+        song["album"] = song_params["album"]
+    except:
+        song["album"] = ""
+
+    try:
+        song["date"] = song_params["date"]
+    except:
+        song["date"] = ""
+
+    try:
+        song["genre"] = song_params["genre"]
+    except:
+        song["genre"] = ""
+
+    try:
+        song["albumartist"] = song_params["albumartist"]
+    except:
+        song["albumartist"] = ""
+
+    try:
+        song["tracknumber"] = song_params["tracknumber"]
+    except:
+        song["tracknumber"] = ""
+
+    song.save()
 
 
 class PurificationMode(Enum):

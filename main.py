@@ -11,7 +11,8 @@ def main():
     
     chdir(params["file_params"]["song_directory"])
 
-    song_files = get_song_files_from_directory(params["file_params"])
+    song_files = get_files_from_directory(params["file_params"]["song_directory"],
+                                        params["file_params"]["supported_extensions"])
 
     apply_params_to_songs(song_files, params)
     

@@ -1,6 +1,10 @@
 from support_funcs import *
-from ui_factory import *
+from ui_factory import UIFactory
+from mp3_renamer import PurificationMode
 from os import getcwd
+
+        
+FONT = ("Arial Bold", 12)
 
 
 def get_params_from_UI():
@@ -8,17 +12,16 @@ def get_params_from_UI():
     supported_extensions = [".mp3"]
     rename_files = False
 
-    artist = "Joe Hisaishi"
-    album = "Kiki's Delivery Service"
-    date = "1989"
-    genre = "Orchestral"
-    albumartist = None
+    artist = "Kensuke Ushio"
+    album = "Chainsaw Man Season 1"
+    date = "2022"
+    genre = "Indie"
     albumartist = None
     tracknum = None
 
-    purification_mode = PurificationMode.none
-    split_symbol = "- "
-    split_index = 1
+    purification_mode = PurificationMode.splitBySymbol
+    split_symbol = " - "
+    split_index = 2
     clutter_indexes = None
     left_end = None
     right_end = None
@@ -49,7 +52,10 @@ def get_params_from_UI():
 
     return params
 
-class Window():
+class Window:
+    rename_files_bool = False
+    selected_purification_mode = PurificationMode.none
+    
     def __init__(self, name, resolution, resizable):
         self.name = name
         self.resolution = resolution
@@ -63,14 +69,15 @@ class Window():
     def start(self):
         self._setup_layout()
         self.window.mainloop()
+        
+    def _setup_values(self):
+        ui_factory = UIFactory()
+        
+        self.selected_purification_mode = ui_factory.int_var(0)
+        self.rename_files_bool = ui_factory.bool_var(True)
     
     def _setup_layout(self):
         ui_factory = UIFactory()
-        
-        font = ("Arial Bold", 12)
-        
-        self.selected_purification_mode = IntVar(value=0)
-        self.rename_files_bool = BooleanVar(value=True)
         
         file_location_pos = 0
         artist_pos = 1
@@ -79,6 +86,7 @@ class Window():
         genre_pos = 4
         purification_mode_pos = 5
         start_button_pos = 6
+        
 
         self.song_dir_input = ui_factory.input_box((1, file_location_pos), True, 50, getcwd())
         self.genre_input = ui_factory.input_box((1, genre_pos), True, 50)
@@ -88,23 +96,23 @@ class Window():
         
         self.song_dir_desc = ui_factory.label((0, file_location_pos), True,
                                             "Enter the song folder location",
-                                            font,
+                                            FONT,
                                             25)
         self.artist_desc = ui_factory.label((0, artist_pos), True,
                                             "Enter the all the album artists",
-                                            font,
+                                            FONT,
                                             25)
         self.album_desc = ui_factory.label((0, album_pos), True,
                                             "Enter the all the album names",
-                                            font,
+                                            FONT,
                                             25)
         self.year_desc = ui_factory.label((0, year_pos), True,
                                             "Enter the all the album years",
-                                            font,
+                                            FONT,
                                             25)
         self.genre_desc = ui_factory.label((0, genre_pos), True,
                                             "Enter the all the album genres",
-                                            font,
+                                            FONT,
                                             25)
         
         self.rename_files_check = ui_factory.check_button((2, file_location_pos), True,
@@ -114,7 +122,7 @@ class Window():
         self.split_by_symbol_radio = ui_factory.radio_button((0, purification_mode_pos), True,
                                                 "Separate the junk with a symbol",
                                                 PurificationMode.splitBySymbol, 
-                                                self.enable_purification_menu_1,
+                                                self._enable_purification_menu_1,
                                                 self.selected_purification_mode)
         self.remove_symbols_at_indexes_radio = ui_factory.radio_button((1, purification_mode_pos), True,
                                                 "Remove junk words by index",
@@ -129,7 +137,7 @@ class Window():
                                                 "Rename files", 
                                                 self._finish_input)
 
-    def enable_purification_menu_1(self):
+    def _enable_purification_menu_1(self):
         pass
 
     def _finish_input(self):

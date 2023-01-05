@@ -5,6 +5,14 @@ from tkinter import scrolledtext
     
     
 class UIFactory():
+    """Wrapper class for making tkinter UI elements, because the default class inits there suck."""
+    
+    
+    def __set_enabled__(self, enabled, item):
+        if not enabled:
+            item.pack_forget()
+    
+    
     def window(self, name, resolution, resizable):
         window = Tk()
         window.title(name)
@@ -12,6 +20,7 @@ class UIFactory():
         window.resizable(width=resizable, height=resizable)
 
         return window
+    
     
     def toolbar(self, window):
         toolbar = Menu(window)
@@ -24,12 +33,13 @@ class UIFactory():
         
         return toolbar
     
+    
     def input_box(self, pos, enabled, width, text=None, focus=False):
         input_box = Entry(width=width)
         input_box.grid(column=pos[0], row=pos[1])
 
-        if not enabled:
-            input_box.pack_forget()
+        self.__set_enabled__(enabled, input_box)
+            
         if text != None:
             input_box.insert(0, text)
         if focus:
@@ -37,41 +47,50 @@ class UIFactory():
 
         return input_box
 
+
     def label(self, pos, enabled, text, font, width):
         label = Label(text=text, font=font, justify=LEFT, anchor="w", width=width)
         label.grid(column=pos[0], row=pos[1])
 
-        if not enabled:
-            label.pack_forget()
+        self.__set_enabled__(enabled, label)
         
         return label
+
 
     def button(self, pos, enabled, text, command=None):
         button = Button(text=text, command=command)
         button.grid(column=pos[0], row=pos[1])
 
-        if not enabled:
-            button.pack_forget()
+        self.__set_enabled__(enabled, button)
 
         return button
+    
     
     def radio_button(self, pos, enabled, text, value, target_variable, command=None):
         radio_button = Radiobutton(text=text, value=value, command=command, variable=target_variable)
         radio_button.grid(column=pos[0], row=pos[1])
         
-        if not enabled:
-            radio_button.pack_forget()
+        self.__set_enabled__(enabled, radio_button)
 
         return radio_button
+    
     
     def check_button(self, pos, enabled, text, target_variable, command=None):
         check_button = Checkbutton(text=text, command=command, variable=target_variable)
         check_button.grid(column=pos[0], row=pos[1])
 
-        if not enabled:
-            check_button.pack_forget()
+        self.__set_enabled__(enabled, check_button)
 
         return check_button
+    
+    
+    def int_var(self, value):
+        return IntVar(value=value)
+
+
+    def bool_var(self, value):
+        return BooleanVar(value=value)
+
 
     def _unused_stuff(self):
         txt2 = Entry(self.window, width=10, state='disabled')

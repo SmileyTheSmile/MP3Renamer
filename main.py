@@ -1,3 +1,5 @@
+from mp3_renamer import MP3Renamer
+from file_operator import FileOperator
 from ui import *
 from support_funcs import *
 from os import chdir
@@ -11,9 +13,12 @@ def main():
     
     chdir(params["file_params"]["song_directory"])
 
-    song_files = get_files_from_directory(params["file_params"]["song_directory"],
-                                        params["file_params"]["supported_extensions"])
+    file_operator = FileOperator()
+    song_files = file_operator.get_files_from_directory(params["file_params"]["song_directory"], params["file_params"]["supported_extensions"])
 
-    #apply_params_to_songs(song_files, params)
-    
-main()
+    mp3_renamer = MP3Renamer()
+    mp3_renamer.apply_params_to_songs(song_files, params)
+
+
+if __name__ == '__main__':
+    main()

@@ -56,5 +56,5 @@ def main_page(page: ft.Page):
     )
 
 
-def ui():
+def run():
     ft.app(target=main_page)

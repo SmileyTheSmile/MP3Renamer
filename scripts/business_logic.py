@@ -3,8 +3,10 @@ from scripts import file_operations as f_op
 from scripts.text_formatter import set_matching_strings, get_matching_strings
 import logging.config
 
+
 class BusinessLogic:
     def __init__(self):
+        pass
         '''
         logging.config.fileConfig('resources/logging.ini', disable_existing_loggers=False)
 

@@ -2,7 +2,7 @@ from scripts import ui
 
 
 def main():
-    ui.ui()
+    ui.run()
 
 
 if __name__ == '__main__':

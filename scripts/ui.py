@@ -4,8 +4,8 @@ import flet as ft
 
 def get_params_from_UI():
     file_params = FileParams(
-        song_dir_name="E:/My Stuff/My Programs/MP3Renamer/songs",
-        supported_extensions=["mp3"],
+        directory="E:/My Stuff/My Programs/MP3Renamer/songs",
+        supported_extensions=[".mp3", ".mp4"],
         rename_files=False
     )
 

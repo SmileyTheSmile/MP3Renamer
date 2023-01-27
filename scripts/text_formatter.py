@@ -39,9 +39,18 @@ def get_matching_strings(strings_list: list, regex_pattern: str):
     return result
 
 
-def set_matching_strings(strings_list: list, pattern: str):
+def set_matching_strings_old(strings_list: list, pattern: str):
     result = [compile(pattern).sub('', string) for string in strings_list]
     logger.debug(result)
     return result
 
     # return list(filter(compile(pattern).sub('', string), strings_list))
+
+def set_matching_strings(strings_list: list, pattern_left: str, pattern_right: str):
+    pattern_left = compile(pattern_left)
+    pattern_right = compile(pattern_right)
+    for i, string in enumerate(strings_list):
+        string = pattern_left.sub('', string)
+        strings_list[i] = pattern_right.sub('', string)
+    logger.debug(strings_list)
+    return strings_list

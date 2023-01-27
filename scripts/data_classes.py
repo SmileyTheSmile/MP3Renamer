@@ -22,7 +22,7 @@ class SongTags:
 
 @dataclass
 class FileParams:
-    song_dir_name: str = "E:/My Stuff/My Programs/MP3Renamer/songs"
+    directory: str = "E:/My Stuff/My Programs/MP3Renamer/songs"
     supported_extensions: list = field(default_factory=lambda: ["mp3"])
     rename_files: bool = False
 

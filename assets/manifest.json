@@ -1,0 +1,18 @@
+{
+  "name": "MyFlet",
+  "short_name": "MyFlet",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#5175C2",
+  "description": "This is a customized Flet app description.",
+  "orientation": "natural",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "icons/icon-200.png",
+      "sizes": "200x200",
+      "type": "image/png"
+    }
+  ]
+}

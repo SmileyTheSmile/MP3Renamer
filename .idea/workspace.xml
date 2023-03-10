@@ -4,16 +4,34 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b59408d3-0f0a-4c69-86e0-98567d2007d0" name="Changes" comment="I will try to commit daily now as an experiment.">
+    <list default="true" id="b59408d3-0f0a-4c69-86e0-98567d2007d0" name="Changes" comment="Made it possible to slice off ends with regex">
+      <change afterPath="$PROJECT_DIR$/assets/icons/icon-200.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/manifest.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/exec.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/control.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/function_speed_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/model.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/utilities/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/utilities/data_classes.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/utilities/file_operations.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/utilities/mp3_renamer.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/utilities/strings.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/utilities/test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/utilities/text_formatter.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/utilities/ui_elements.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/view.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/business_logic.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/business_logic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/data_classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/data_classes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/file_operations.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/file_operations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/func_tester.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/func_tester.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/mp3_renamer.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/mp3_renamer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/text_formatter.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/text_formatter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/ui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/MP3RenamerUML.mdj" beforeDir="false" afterPath="$PROJECT_DIR$/assets/MP3RenamerUML.mdj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/logging.ini" beforeDir="false" afterPath="$PROJECT_DIR$/assets/logging.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/business_logic.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/data_classes.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/file_operations.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/func_tester.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/mp3_renamer.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/text_formatter.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/utilities/unused.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/ui.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,6 +42,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Setup Script" />
+        <option value="manifest" />
         <option value="Python Script" />
       </list>
     </option>
@@ -47,34 +66,34 @@
     <option name="showMembers" value="true" />
     <option name="sortByType" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.tools&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="PyCoverageOptionsProvider">
     <option name="myUseBundledCoveragePy" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\My Stuff\My Programs\MP3Renamer\assets" />
+      <recent name="E:\My Stuff\My Programs\MP3Renamer\scripts\utilities" />
+      <recent name="E:\My Stuff\My Programs\MP3Renamer\assets\icons" />
       <recent name="E:\My Stuff\My Programs\MP3Renamer\scripts" />
       <recent name="E:\My Stuff\My Programs\MP3Renamer\resources" />
-      <recent name="E:\My Stuff\My Programs\MP3Renamer" />
-      <recent name="E:\My Stuff\My Programs\MP3Renamer\testing" />
-      <recent name="E:\My Stuff\My Programs\MP3Renamer\logs" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main">
-    <configuration name="file_operations" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.exec">
+    <configuration name="exec" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MP3Renamer" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -82,12 +101,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/scripts" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/file_operations.py" />
+      <option name="SCRIPT_NAME" value="E:\My Stuff\My Programs\MP3Renamer\exec.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -118,7 +137,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="model" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MP3Renamer" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -126,12 +145,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/scripts" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="SCRIPT_NAME" value="E:\My Stuff\My Programs\MP3Renamer\scripts\model.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -164,8 +183,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.main" />
-        <item itemvalue="Python.file_operations" />
+        <item itemvalue="Python.exec" />
+        <item itemvalue="Python.model" />
         <item itemvalue="Python.text_formatter" />
         <item itemvalue="Python.func_tester" />
       </list>
@@ -180,6 +199,35 @@
       <option name="presentableId" value="Default" />
       <updated>1673008008400</updated>
       <workItem from="1674731589485" duration="22039000" />
+      <workItem from="1674811261934" duration="5813000" />
+      <workItem from="1674979006902" duration="2000" />
+      <workItem from="1674995431399" duration="7117000" />
+      <workItem from="1675006701013" duration="7621000" />
+      <workItem from="1675062440000" duration="15620000" />
+      <workItem from="1675088076608" duration="158000" />
+      <workItem from="1675090537112" duration="14268000" />
+      <workItem from="1675151958475" duration="5783000" />
+      <workItem from="1675186722928" duration="7121000" />
+      <workItem from="1675253821282" duration="7565000" />
+      <workItem from="1675340060735" duration="1601000" />
+      <workItem from="1675351496440" duration="6421000" />
+      <workItem from="1675413027331" duration="3071000" />
+      <workItem from="1675434447906" duration="15445000" />
+      <workItem from="1675502078261" duration="1283000" />
+      <workItem from="1675507211791" duration="4862000" />
+      <workItem from="1675512563043" duration="738000" />
+      <workItem from="1675514203276" duration="98000" />
+      <workItem from="1675514319634" duration="340000" />
+      <workItem from="1675514740885" duration="355000" />
+      <workItem from="1675515158025" duration="1741000" />
+      <workItem from="1675521926427" duration="1750000" />
+      <workItem from="1675540717157" duration="3741000" />
+      <workItem from="1675588107744" duration="3898000" />
+      <workItem from="1675686315439" duration="3497000" />
+      <workItem from="1675776089614" duration="2915000" />
+      <workItem from="1675933744012" duration="688000" />
+      <workItem from="1676103266598" duration="46000" />
+      <workItem from="1676135439068" duration="26000" />
     </task>
     <task id="LOCAL-00001" summary="Huge refactoring, added logging, started regex support, replaced tkinter with flet, made packages, etc">
       <created>1673201731337</created>
@@ -195,7 +243,14 @@
       <option name="project" value="LOCAL" />
       <updated>1674732038873</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Made it possible to slice off ends with regex">
+      <created>1674811664981</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1674811664981</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -216,11 +271,17 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Huge refactoring, added logging, started regex support, replaced tkinter with flet, made packages, etc" />
     <MESSAGE value="I will try to commit daily now as an experiment." />
-    <option name="LAST_COMMIT_MESSAGE" value="I will try to commit daily now as an experiment." />
+    <MESSAGE value="Made it possible to slice off ends with regex" />
+    <option name="LAST_COMMIT_MESSAGE" value="Made it possible to slice off ends with regex" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/MP3Renamer$main.coverage" NAME="main Coverage Results" MODIFIED="1674767554604" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/MP3Renamer$file_operations.coverage" NAME="file_operations Coverage Results" MODIFIED="1674750292613" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
-    <SUITE FILE_PATH="coverage/MP3Renamer$test.coverage" NAME="test Coverage Results" MODIFIED="1674734849445" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/MP3Renamer$function_speed_test.coverage" NAME="function_speed_test Coverage Results" MODIFIED="1675934382625" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/MP3Renamer$main.coverage" NAME="main Coverage Results" MODIFIED="1675358919284" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/MP3Renamer$ui_elements.coverage" NAME="ui_elements Coverage Results" MODIFIED="1675778201213" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts/utilities" />
+    <SUITE FILE_PATH="coverage/MP3Renamer$ui.coverage" NAME="ui Coverage Results" MODIFIED="1675106501633" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/MP3Renamer$file_operations.coverage" NAME="file_operations Coverage Results" MODIFIED="1675151997820" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/MP3Renamer$todo.coverage" NAME="todo Coverage Results" MODIFIED="1675074310870" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/MP3Renamer$test.coverage" NAME="test Coverage Results" MODIFIED="1675778171428" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts/utilities" />
+    <SUITE FILE_PATH="coverage/MP3Renamer$exec.coverage" NAME="exec Coverage Results" MODIFIED="1675779035323" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

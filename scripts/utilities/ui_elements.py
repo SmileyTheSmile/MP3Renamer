@@ -1,5 +1,4 @@
 import flet as ft
-import flet.colors as colors
 
 from scripts.utilities.strings import UIText
 

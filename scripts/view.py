@@ -1,5 +1,4 @@
 import flet as ft
-import flet.colors as colors
 
 from scripts.utilities import data_classes as data
 from scripts.utilities import ui_elements as ui_elems

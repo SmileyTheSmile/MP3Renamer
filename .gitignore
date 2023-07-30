@@ -1,3 +1,4 @@
-/songs/
-/logs/
-/Documentation/
+logs
+.vscode
+.venv
+**/__pycache__/

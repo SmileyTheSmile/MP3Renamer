@@ -1,13 +1,12 @@
 from scripts.control import MVCControl
 from scripts.view import MVCView
 from scripts.model import Model
+from scripts.logger import setup_logger
 
-import logging.config
-
-
-# https://www.pythontutorial.net/tkinter/tkinter-mvc/
 def main():
-    logging.config.fileConfig('assets/logging.ini', disable_existing_loggers=False)
+    """https://www.pythontutorial.net/tkinter/tkinter-mvc/"""
+    
+    setup_logger(__file__, 'assets/logging.ini')
 
     model = Model()
     control = MVCControl(model)

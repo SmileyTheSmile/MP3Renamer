@@ -29,6 +29,6 @@ class Model:
         logger.info(f"Updated settings.")
 
     def load_settings(self):
-        # TODO Add the ability to save settings in a JSON file
+        #TODO Add the ability to save settings in a JSON file
         self.settings = data.Settings()
         logger.info(f"Loaded settings.")

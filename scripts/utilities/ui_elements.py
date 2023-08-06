@@ -3,6 +3,51 @@ import flet as ft
 from scripts.utilities.strings import UIText
 
 
+class VideosList(ft.UserControl):
+    def __init__(self):
+        super().__init__()
+        
+        self.videos_list = ft.ListView(
+            expand=True,
+            spacing=10,
+            )
+        
+        self.link_input = ft.TextField(
+            label="Textbox with 'change' event:",
+            on_change=self.__link_input_changed,
+        )
+        
+    def __link_input_changed(self, e: ft.ControlEvent):
+        pass
+        
+    def build(self):
+        self.expand=True
+        
+        return ft.Column(
+            expand=1,
+            controls=
+            [
+                self.link_input,
+                self.videos_list,
+            ]
+        )
+
+def get_url_input_popup(on_click, on_dismiss):
+    return ft.BottomSheet(
+        ft.Container(
+            ft.Column(
+                [
+                    ft.Text("This is sheet's content!"),
+                    ft.ElevatedButton("Close bottom sheet", on_click=on_click),
+                ],
+                tight=True,
+            ),
+            padding=10,
+        ),
+        open=True,
+        on_dismiss=on_dismiss,
+    )
+
 def get_appbar():
     button1 = ft.IconButton(ft.icons.WB_SUNNY_OUTLINED)
     button2 = ft.IconButton(ft.icons.FILTER_3)

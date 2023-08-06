@@ -2,3 +2,5 @@ mutagen
 easyid3
 flet
 colorlog
+pytube
+PyInstaller

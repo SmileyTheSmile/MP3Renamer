@@ -1,4 +1,6 @@
 logs
 .vscode
 .venv
+build
+dist
 **/__pycache__/

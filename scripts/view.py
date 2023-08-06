@@ -13,6 +13,41 @@ class MVCView:
     def __init__(self, control):
         self.mvc_control = control
 
+        self.appbar = ui_elems.get_appbar()
+        self.working_area = ui_elems.VideosList()
+
+    def run(self):
+        ft.app(target=self.main_page, assets_dir="assets")
+
+    def main_page(self, page: ft.Page):
+        page.title = UIText.app_name
+        page.appbar = self.appbar
+
+        page_content = [
+                            self.working_area
+                        ]
+        
+        page.overlay.append(ui_elems.get_url_input_popup(self.on_click, self.on_dismiss))
+
+        page.add(
+            ft.Row(
+                expand=1,
+                controls=page_content,
+            )
+        )
+    
+    def on_click(e):
+        pass
+    def on_dismiss(e):
+        pass
+
+
+class MVCViewOld:
+    mvc_control: MVCControl
+
+    def __init__(self, control):
+        self.mvc_control = control
+
         self.file_picker = ui_elems.get_file_picker(
             self.update_files,
             self.mvc_control.settings.allowed_extensions,

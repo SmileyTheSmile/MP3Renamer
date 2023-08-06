@@ -1,12 +1,10 @@
 from scripts.control import MVCControl
-from scripts.view import MVCView
+from scripts.view import MVCView, MVCViewOld
 from scripts.model import Model
 from scripts.logger import setup_logger
 
 def main():
     """https://www.pythontutorial.net/tkinter/tkinter-mvc/"""
-    
-    setup_logger(__file__, 'assets/logging.ini')
 
     model = Model()
     control = MVCControl(model)
@@ -16,4 +14,5 @@ def main():
 
 
 if __name__ == '__main__':
+    #setup_logger(__file__, 'assets/logging.ini')
     main()

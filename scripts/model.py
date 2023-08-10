@@ -7,7 +7,7 @@ from scripts.utilities import data_classes as data
 logger = colorlog.getLogger(__name__)
 
 
-class Model:
+class MVCModel:
     def __init__(self):
         self.files = None
         self.settings = None

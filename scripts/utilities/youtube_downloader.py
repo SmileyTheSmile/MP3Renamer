@@ -1,4 +1,5 @@
 from pytube import YouTube
+from typing import List
 
 '''
 >>> yt = YouTube(
@@ -11,17 +12,20 @@ from pytube import YouTube
     )
 '''
 
+#TODO Use Dependency injection on downloaders and video objects
 class IYoutubeDownloader:
-    def download(link: str) -> None:
+    videos: List[YouTube] = []
+    
+    def add(self, link: str) -> None:
         """
-        _summary_
+        Add video to the download queue.
 
         Args:
-            link (str): _description_
+            link (str): Link to the video.
         """
         pass
     
-    def download_playlist(link: str) -> None:
+    def download_queue(self) -> None:
         """
         _summary_
 
@@ -30,21 +34,23 @@ class IYoutubeDownloader:
         """
         pass
 
+class IYoutubeVideo:
+    pass
+
 class PytubeYoutubeDownloader(IYoutubeDownloader):
-    def download(link: str):
-        youtubeObject = YouTube(link)
-        youtubeObject = youtubeObject.streams.get_audio_only()
-        print(youtubeObject.title)
-        try:
-            youtubeObject.download()
-            print("Download is completed successfully")
-        except:
-            print("An error has occurred")
+    def add(self, link: str):
+        self.videos.append(YouTube(link))
+        
+    def download_queue(self):
+        for video in self.videos:
+            try:
+                video.streams.get_audio_only().download()
+                print("Download is completed successfully")
+            except:
+                print("An error has occurred")
 
 
-
-if __name__ == '__main__':
-    PytubeYoutubeDownloader.download("https://www.youtube.com/watch?v=V-GC9LdbBRo")
-
-    #link = input("Enter the YouTube video URL: ")
-    #Download(link)
+class PytubeYoutubeVideo(IYoutubeVideo, YouTube):
+    @property
+    def thumbnail_url(self) -> str:
+        return super().thumbnail_url

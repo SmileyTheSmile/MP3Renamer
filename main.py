@@ -1,6 +1,6 @@
+from scripts.model import MVCModel
 from scripts.control import MVCControl
 from scripts.view import MVCView
-from scripts.model import MVCModel
 from scripts.logger import setup_logger
 
 def main():

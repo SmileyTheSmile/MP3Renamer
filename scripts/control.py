@@ -1,7 +1,5 @@
 import colorlog
 
-from scripts.utilities import mp3_renamer as mp3r
-from scripts.utilities import text_formatter as tf
 from scripts.utilities import youtube_downloader as yt
 
 from scripts.model import MVCModel
@@ -13,7 +11,7 @@ logger = colorlog.getLogger(__name__)
 class MVCControl:
     mvc_model: MVCModel
     
-    youtube_downloader: yt.IYoutubeDownloader
+    youtube_downloader: yt.PytubeYoutubeDownloader
 
     def __init__(self, model):
         self.mvc_model = model
@@ -32,11 +30,15 @@ class MVCControl:
     def update_files(self, directory):
         self.mvc_model.update_files(directory)
 
-    def add_youtube_video(self, link: str):
+    def add_youtube_video(self, link: str, on_progress, on_complete):
         logger.debug(link)
-        self.youtube_downloader.add(link)
-
-
+        self.youtube_downloader.add(link, on_progress, on_complete)
+    
+    def process_link(self, link: str):
+        self.youtube_downloader.get_link_type(link)
+    
+    def download(self, link: str):
+        self.youtube_downloader.download(link)
         '''
         default_song_tags = SongTags(
             artist="Kensuke Ushio",

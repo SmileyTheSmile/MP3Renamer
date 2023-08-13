@@ -1,7 +1,12 @@
 import flet as ft
 import sys
 
-from typing import List
+from pytube import YouTube, Playlist, extract
+from typing import Any, List, Optional, Union
+
+from flet_core.control import Control, OptionalNumber
+from flet_core.ref import Ref
+from flet_core.types import AnimationValue, ClipBehavior, OffsetValue, ResponsiveNumber, RotateValue, ScaleValue
 
 from scripts.utilities import data_classes as data
 from scripts.utilities.strings import UIText
@@ -56,6 +61,7 @@ class MVCView:
                                     self.submit_button,
                                 ]
                             ),
+                            self.loading_ring_row,
                             self.download_widget,
                             self.videos_list,
                         ]
@@ -133,11 +139,6 @@ class MVCView:
                         [
                         ],
                 )
-        self.progress_bar = ft.ProgressBar(
-            value=0,
-            width=400,
-            visible=False,
-        )
         self.download_button = ft.ElevatedButton(
             text=UIText.enter_video_link,
             on_click=self.__download_button_clicked
@@ -145,8 +146,9 @@ class MVCView:
         self.download_widget = ft.Container(
             visible=False,
             expand=1,
+            bgcolor=ft.colors.SURFACE_VARIANT,
             border_radius=ft.border_radius.all(10),
-            padding=10,
+            padding=5,
             shadow=ft.BoxShadow(
                 spread_radius=1,
                 blur_radius=15,
@@ -171,12 +173,20 @@ class MVCView:
                             self.download_type_select,
                             self.video_download_menu,
                             self.audio_download_menu,
-                            self.progress_bar,
                             self.download_button,
                         ]
                     )
                 ]
             )
+        )
+        self.loading_ring_row = ft.Row(
+            visible=False,
+            alignment=ft.MainAxisAlignment.SPACE_AROUND,
+            expand=1,
+            controls=
+            [
+                ft.ProgressRing(),
+            ]
         )
         
         ft.app(target=self.main_page, assets_dir="assets")
@@ -184,16 +194,30 @@ class MVCView:
     def __link_input_changed(self, e: ft.ControlEvent):
         pass
         
+    def __set_loading_ring_visibility(self, value):
+        self.loading_ring_row.visible = value
+        self.loading_ring_row.update()
+
     def __submit_button_clicked(self, e: ft.ControlEvent):
-        self.mvc_control.add_youtube_video(self.link_input.value,
-                                        self.__on_download_progress,
-                                        self.__on_download_complete)
-        self.video = self.mvc_control.videos_queue[-1] 
-        
+        self.__set_loading_ring_visibility(True)
+
+        self.video = self.mvc_control.get_video(self.link_input.value)
         self.download_widget.visible = True
-        self.video_thumbnail.src = self.video.thumbnail_url
-        self.video_title.value = self.video.title
+        if self.video:
+            self.video_thumbnail.src = self.video.thumbnail_url
+            self.video_title.value = self.video.title
+
+        self.__set_loading_ring_visibility(False)
         self.download_widget.update()
+        
+    def __download_button_clicked(self, e: ft.ControlEvent):
+        self.videos_list.controls.append(VideosListItem(self.video))
+        self.videos_list.controls.append(ft.Divider())
+        self.download_widget.visible = False
+        self.videos_list.update()
+        self.download_widget.update()
+
+        self.mvc_control.download(self.video)
 
     def __download_type_changed(self, e: ft.ControlEvent):
         if self.download_type_select.value == "audio":
@@ -203,18 +227,110 @@ class MVCView:
             self.video_download_menu.hidden = False
             self.audio_download_menu.hidden = True
   
-    def __download_button_clicked(self, e: ft.ControlEvent):
-        self.progress_bar.visible = True
-        self.progress_bar.update()
-        self.mvc_control.download(self.video)
 
+
+class VideosListItem(ft.UserControl):
+    video: YouTube
+
+    def __init__(self, video: YouTube):
+        super().__init__()
+
+        video.register_on_complete_callback(self.__on_download_complete)
+        video.register_on_progress_callback(self.__on_download_progress)
+
+        self.thumbnail = ft.Image(
+            src=video.thumbnail_url,
+            width=128,
+            height=72,
+            fit=ft.ImageFit.COVER,
+            repeat=ft.ImageRepeat.NO_REPEAT,
+            border_radius=ft.border_radius.all(10),
+        )
+        self.title = ft.Text(
+            value=video.title,
+        )
+        self.progress_bar = ft.ProgressBar(
+            value=0,
+            width=400,
+        )
+        self.filesize = ft.Text(
+            value="0.0 MB",
+        )
+        self.playlist = ft.Text(
+            value=video,
+        )
+        self.length = ft.Text(
+            value=str(video.length),
+        )
+        self.internet_speed = ft.Text(
+            value="0.0 Mb/sec",
+        )
+        self.delete_button = ft.IconButton(
+            icon=ft.icons.DELETE_FOREVER_ROUNDED,
+            icon_color="pink600",
+            icon_size=20,
+            tooltip="Delete record",
+        )
+
+    def build(self):
+        return ft.Row(
+                expand=1,
+                controls=
+                [
+                    ft.Column(
+                        controls=
+                        [
+                            self.thumbnail,
+                        ]
+                    ),
+                    ft.Column(
+                        controls=
+                        [
+                            ft.Row(
+                                controls=
+                                [
+                                    self.title,
+                                    self.delete_button,
+                                ]
+                            ),
+                            ft.Row(
+                                controls=
+                                [
+                                    self.length,
+                                    self.filesize,
+                                    self.playlist,
+                                ]
+                            ),
+                            ft.Row(
+                                controls=
+                                [
+                                    self.progress_bar,
+                                    self.internet_speed
+                                ]
+                            )
+                        ]
+                    ),
+                ]
+        )
+    
     def __on_download_progress(self, stream, chunk, bytes_remaining):
         current = (stream.filesize - bytes_remaining) / stream.filesize
         self.progress_bar.value = current
         self.progress_bar.update()
+        '''
+        global download_start_time
+        seconds_since_download_start = (datetime.now()-        download_start_time).total_seconds()    
+        total_size = stream.filesize
+        bytes_downloaded = total_size - bytes_remaining
+        percentage_of_completion = bytes_downloaded / total_size * 100
+        speed = round(((bytes_downloaded / 1024) / 1024) / seconds_since_download_start, 2)    
+        seconds_left = round(((bytes_remaining / 1024) / 1024) / float(speed), 2)
+        '''
+    
+    def __update_progress_bar(self):
+        pass
 
     def __on_download_complete(self, stream, path):
-        self.progress_bar.visible = False
-        self.progress_bar.update()
+        self.download_row.visible = False
+        self.download_row.update()
         print('Completed:', path)
-

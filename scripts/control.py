@@ -23,9 +23,8 @@ class MVCControl:
     def videos_queue(self):
         return self.youtube_downloader.videos
 
-    @property
-    def settings(self):
-        return self.mvc_model.settings
+    def get_video(self, link: str):
+        return self.youtube_downloader.get_video(link)
 
     def update_files(self, directory):
         self.mvc_model.update_files(directory)
@@ -37,8 +36,10 @@ class MVCControl:
     def process_link(self, link: str):
         self.youtube_downloader.get_link_type(link)
     
-    def download(self, link: str):
-        self.youtube_downloader.download(link)
+    def download(self, video):
+        self.youtube_downloader.add(video)
+        if not self.youtube_downloader.downloading:
+            self.youtube_downloader.start_download_queue()
         '''
         default_song_tags = SongTags(
             artist="Kensuke Ushio",

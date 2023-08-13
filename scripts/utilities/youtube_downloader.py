@@ -1,36 +1,49 @@
 from pytube import YouTube, Playlist, extract
-from pytube.cli import on_progress
 from typing import List
+from threading import Thread
+from queue import Queue, deque
 import sys
+import pytube
+import time
 
+pytube.request.default_range_size = int(9437184 / 9)  # 1MB chunk size
 
 #TODO Use Dependency injection on downloaders and video objects
 class PytubeYoutubeDownloader:
-    videos: List[YouTube] = []
+    videos: Queue = Queue()
+    downloading: bool = False
 
-    def add(self, link: str, on_progress, on_complete):
-        video = YouTube(
-            link,
-            on_progress_callback=on_progress,
-            on_complete_callback=on_complete
-        )
-        #video.register_on_progress_callback(show_progress_bar)
-        self.videos.append(video)
+    def get_video(self, link: str):
+        try:
+            video = YouTube(link)
+        except Exception as error:
+            video = None
+            print(f"Error while connecting: {error}")
+
+        return video
+
+    def add(self, video: YouTube):
+        self.videos.put(video)
+        
+    def start_download_queue(self):
+        self.downloading = True
+        theads_num = min(50, self.videos.qsize())
+
+        for _ in range(theads_num):
+            worker = Thread(target=self.download_queue)
+            worker.setDaemon(True)
+            worker.start()
+
+        self.videos.join()
+            
+    def download_queue(self):
+        while not self.videos.empty():
+            self.download(self.videos.get())
+        self.downloading = False
 
     def download(self, video: YouTube):
-        video.streams.get_highest_resolution().download()
-
-    def get_link_type(self, link: str):
-        print(extract.playlist_id(link))
-        if extract.playlist_id(link) != "":
-            result = Playlist(link)
-        else:
-            result = YouTube(link)
-        
-    def download_queue(self):
-        for video in self.videos:
-            try:
-                video.streams.get_audio_only().download()
-                print("Download is completed successfully")
-            except:
-                print("An error has occurred")
+        try:
+            video.streams.get_highest_resolution().download()
+            print("Download is completed successfully")
+        except Exception as error:
+            print(f"Error while downloading: {type(error)}")

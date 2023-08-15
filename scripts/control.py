@@ -11,6 +11,9 @@ logger = colorlog.getLogger(__name__)
 class MVCControl:
     mvc_model: MVCModel
     
+    audio_extensions = ["mp3"]
+    video_extensions = ["mp4"]
+    
     youtube_downloader: yt.PytubeYoutubeDownloader
 
     def __init__(self, model):

@@ -43,7 +43,13 @@ class PytubeYoutubeDownloader:
 
     def download(self, video: YouTube):
         try:
-            video.streams.get_highest_resolution().download()
+            video.streams.get_highest_resolution().download(
+                output_path="",
+                filename="",
+                
+            )
             print("Download is completed successfully")
+        except AttributeError as error:
+            print(error)
         except Exception as error:
             print(f"Error while downloading: {type(error)}")

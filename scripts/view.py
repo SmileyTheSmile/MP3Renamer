@@ -52,15 +52,11 @@ class MVCView:
         page.title = UIText.app_name
         page.appbar = self.appbar
         page.window_resizable = True
+        page.window_min_height = 600
+        page.window_min_width = 1200
 
         page_content = [
-                            ft.Row(
-                                controls=
-                                [
-                                    self.link_input,
-                                    self.submit_button,
-                                ]
-                            ),
+                            self.link_row,
                             self.loading_ring_row,
                             self.download_widget,
                             self.videos_list,
@@ -75,13 +71,8 @@ class MVCView:
         
     def __init__(self, control):
         self.mvc_control = control
-        self.audio_extensions = ["mp3"]
-        self.video_extensions = ["mp4"]
         
-        self.videos_list = ft.ListView(
-            expand=1,
-            spacing=10,
-        )
+        
         self.link_input = ft.TextField(
             expand=1,
             label=UIText.link_input_text,
@@ -92,6 +83,57 @@ class MVCView:
             text=UIText.enter_video_link,
             on_click=self.__submit_button_clicked
             )
+        self.link_row = ft.Row(
+            controls=
+                [
+                    self.link_input,
+                    self.submit_button,
+                ],
+        )        
+        
+        
+        self.loading_ring_row = ft.Row(
+            expand=1,
+            visible=False,
+            alignment=ft.MainAxisAlignment.SPACE_AROUND,
+            controls=
+            [
+                ft.ProgressRing(),
+            ]
+        )
+        
+        
+        self.filepath = ft.TextField(
+            label="Введите путь к файлу",
+            on_change=self.__link_input_changed,
+            value="/home/dannyboy/Documents/Projects/MP3Renamer/"
+        )
+        self.filename = ft.TextField(
+            label="Введите название файла",
+            on_change=self.__link_input_changed,
+            value="J5EXnh53A1k"
+        )
+        self.extentions_select = ft.Dropdown(
+            label=UIText.download_type_select_label,
+            hint_text=UIText.download_type_select_hint,
+            options=
+            [
+                ft.dropdown.Option
+                (
+                    key=extention,
+                    text=extention.upper()
+                ) for extention in self.mvc_control.audio_extensions
+            ],
+        )
+        self.file_row = ft.Row(
+            controls=
+            [
+                self.filepath,
+                self.filename,
+                self.extentions_select,
+            ],
+        )
+        
         self.video_thumbnail = ft.Image(
                     src=None,
                     width=160,
@@ -100,6 +142,7 @@ class MVCView:
                     repeat=ft.ImageRepeat.NO_REPEAT,
                     border_radius=ft.border_radius.all(10),
                 )
+        
         self.video_title = ft.Text(
             value=None,
         )
@@ -117,42 +160,43 @@ class MVCView:
                                     ),],
                                     on_change=self.__download_type_changed,
                                 )
-        self.audio_extentions_select = ft.Dropdown(
-                            label=UIText.download_type_select_label,
-                            hint_text=UIText.download_type_select_hint,
-                            options=[ft.dropdown.Option(
-                                key=extention,
-                                text=extention.upper()
-                            ) for extention in self.audio_extensions],
-                        )
-        self.video_download_menu = ft.Row(
-                    expand=1,
-                    visible=True,
-                    controls=
-                        [
-                        ],
-                )
-        self.audio_download_menu = ft.Row(
-                    expand=1,
-                    visible=False,
-                    controls=
-                        [
-                        ],
-                )
+        self.title_row = ft.Row(
+            controls=
+                [
+                    self.video_title,
+                    self.download_type_select,
+                ],
+        )    
+        
+        self.video_download_row = ft.Row(
+            visible=True,
+            controls=
+            [
+            ],
+        )
+        
+        self.audio_download_row = ft.Row(
+            visible=False,
+            controls=
+            [
+            ],
+        )
+        
         self.download_button = ft.ElevatedButton(
             text=UIText.enter_video_link,
             on_click=self.__download_button_clicked
         )
+        
         self.download_widget = ft.Container(
-            visible=False,
             expand=1,
+            visible=False,
             bgcolor=ft.colors.SURFACE_VARIANT,
             border_radius=ft.border_radius.all(10),
             padding=5,
             shadow=ft.BoxShadow(
                 spread_radius=1,
                 blur_radius=15,
-                color=ft.colors.BLUE_GREY_300,
+                color=ft.colors.SURFACE_VARIANT,
                 offset=ft.Offset(0, 0),
                 blur_style=ft.ShadowBlurStyle.OUTER,
             ),
@@ -169,28 +213,31 @@ class MVCView:
                     ft.Column(
                         controls=
                         [
-                            self.video_title,
-                            self.download_type_select,
-                            self.video_download_menu,
-                            self.audio_download_menu,
-                            self.download_button,
+                            self.title_row,
+                            self.file_row,
+                            self.video_download_row,
+                            self.audio_download_row,
+                            ft.Row(
+                                controls=
+                                [
+                                    self.download_button,
+                                ],
+                            )    
                         ]
                     )
                 ]
             )
         )
-        self.loading_ring_row = ft.Row(
-            visible=False,
-            alignment=ft.MainAxisAlignment.SPACE_AROUND,
+
+
+        self.videos_list = ft.ListView(
             expand=1,
-            controls=
-            [
-                ft.ProgressRing(),
-            ]
+            spacing=10,
         )
         
         ft.app(target=self.main_page, assets_dir="assets")
-
+    
+    
     def __link_input_changed(self, e: ft.ControlEvent):
         pass
         
@@ -221,13 +268,12 @@ class MVCView:
 
     def __download_type_changed(self, e: ft.ControlEvent):
         if self.download_type_select.value == "audio":
-            self.video_download_menu.hidden = True
-            self.audio_download_menu.hidden = False
+            self.video_download_row.hidden = True
+            self.audio_download_row.hidden = False
         elif self.download_type_select.value == "video":
-            self.video_download_menu.hidden = False
-            self.audio_download_menu.hidden = True
+            self.video_download_row.hidden = False
+            self.audio_download_row.hidden = True
   
-
 
 class VideosListItem(ft.UserControl):
     video: YouTube
@@ -257,7 +303,7 @@ class VideosListItem(ft.UserControl):
             value="0.0 MB",
         )
         self.playlist = ft.Text(
-            value=video,
+            value=None,
         )
         self.length = ft.Text(
             value=str(video.length),
@@ -271,6 +317,14 @@ class VideosListItem(ft.UserControl):
             icon_size=20,
             tooltip="Delete record",
         )
+        
+        self.download_row = ft.Row(
+                                controls=
+                                [
+                                    self.progress_bar,
+                                    self.internet_speed
+                                ]
+                            )
 
     def build(self):
         return ft.Row(
@@ -301,13 +355,7 @@ class VideosListItem(ft.UserControl):
                                     self.playlist,
                                 ]
                             ),
-                            ft.Row(
-                                controls=
-                                [
-                                    self.progress_bar,
-                                    self.internet_speed
-                                ]
-                            )
+                            self.download_row
                         ]
                     ),
                 ]
@@ -333,4 +381,3 @@ class VideosListItem(ft.UserControl):
     def __on_download_complete(self, stream, path):
         self.download_row.visible = False
         self.download_row.update()
-        print('Completed:', path)

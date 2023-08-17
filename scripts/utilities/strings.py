@@ -21,6 +21,7 @@ class UIText:
     enter_video_link = "Ввести"
     download_type_select_label = "Тип файла"
     download_type_select_hint = "Скачать видео или аудио файл"
+    seconds = "сек."
 
 class UITextOld:
     app_name = "MP3Renamer"

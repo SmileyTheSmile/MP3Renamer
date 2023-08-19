@@ -44,9 +44,8 @@ class PytubeYoutubeDownloader:
     def download(self, video: YouTube):
         try:
             video.streams.get_highest_resolution().download(
-                output_path="",
-                filename="",
-                
+                output_path="/home/dannyboy/Documents/Projects/MP3Renamer/downloads",
+                #filename="",
             )
             print("Download is completed successfully")
         except AttributeError as error:

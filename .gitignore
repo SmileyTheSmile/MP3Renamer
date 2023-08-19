@@ -1,8 +1,9 @@
-logs
+**/__pycache__/
 .vscode
 .venv
 build
 dist
-**/__pycache__/
+logs
+downloads
 
 main.spec

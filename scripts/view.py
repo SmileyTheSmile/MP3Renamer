@@ -402,9 +402,12 @@ class VideosListItem(ft.UserControl):
         seconds_left = round(((bytes_remaining / 1024) / 1024) / float(speed), 2)
         '''
     
-    def __update_progress_bar(self):
-        pass
-
     def __on_download_complete(self, stream, path):
+        self.progress_bar.bgcolor = self.progress_bar.color
+        self.progress_bar.color = (0, 255, 0)
+        self.progress_bar.value = 0
+        self.progress_bar.update()
+        
+    def __on_conversion_complete(self):
         self.download_row.visible = False
         self.download_row.update()

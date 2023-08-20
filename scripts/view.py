@@ -122,7 +122,22 @@ class MVCView:
 class DownloadWidget(ft.UserControl):
     mvc_control: MVCControl
     video: YouTube
+    
     parent: ft.UserControl
+        
+    page_padding = 5
+    thumbnail_width = 160
+    thumbnail_height = 90
+    
+    video_thumbnail = ft.Ref[ft.Image]()
+    download_type_select = ft.Ref[ft.Dropdown]()
+    video_title = ft.Ref[ft.Text]()
+    filepath = ft.Ref[ft.TextField]()
+    filename = ft.Ref[ft.TextField]()
+    extention = ft.Ref[ft.Dropdown]()
+    download_button = ft.Ref[ft.ElevatedButton]()
+    video_download_row = ft.Ref[ft.Row]()
+    audio_download_row = ft.Ref[ft.Row]()
     
     def __init__(self, parent: ft.UserControl, control: MVCControl):
         super().__init__()
@@ -130,106 +145,15 @@ class DownloadWidget(ft.UserControl):
         self.parent = parent
         self.mvc_control = control
         
-        self.page_padding = 5
-        self.visible = False,
-        
-        self.video_thumbnail = ft.Image(
-                    src=None,
-                    width=160,
-                    height=90,
-                    fit=ft.ImageFit.COVER,
-                    repeat=ft.ImageRepeat.NO_REPEAT,
-                    border_radius=ft.border_radius.all(10),
-                )
-        self.download_type_select = ft.Dropdown(
-            width=self.video_thumbnail.width,
-            value="video",
-            label=UIText.download_type_select_label,
-            hint_text=UIText.download_type_select_hint,
-            options=
-            [
-                ft.dropdown.Option(
-                key="audio",
-                text=UIText.audio_download_option_text
-                ),
-                ft.dropdown.Option(
-                    key="video",
-                    text=UIText.video_download_option_text
-                )
-            ],
-            on_change=self.__download_type_changed,
-        )
-        
-        self.video_title = ft.Text(
-            value=None,
-        )
-        self.title_row = ft.Row(
-            controls=
-            [
-                self.video_title,
-            ],
-        )    
-        
-        self.filepath = ft.TextField(
-            expand=2,
-            label="Введите путь к файлу",
-            on_change=self.__filepath_changed,
-            value=None
-        )
-        self.filename = ft.TextField(
-            expand=1,
-            label="Введите название файла",
-            on_change=self.__filename_changed,
-            value=None
-        )
-        self.extention = ft.Dropdown(
-            width=160,
-            label=UIText.download_type_select_label,
-            hint_text=UIText.download_type_select_hint,
-            options=
-            [
-                ft.dropdown.Option
-                (
-                    key=extention,
-                    text=extention.upper()
-                ) for extention in self.mvc_control.audio_extensions
-            ],
-        )
-        self.file_row = ft.Row(
-            controls=
-            [
-                self.filepath,
-                self.filename,
-                self.extention,
-            ],
-        )
-        
-        self.video_download_row = ft.Row(
-            visible=True,
-            controls=
-            [
-            ],
-        )
-        
-        self.audio_download_row = ft.Row(
-            visible=False,
-            controls=
-            [
-            ],
-        )
-        
-        self.download_button = ft.ElevatedButton(
-            text=UIText.enter_video_link,
-            on_click=self.__download_button_clicked
-        )
+        self.visible = False
         
     def set_video(self, link: str):
         self.video = self.mvc_control.get_video(link)
         
         if self.video:
-            self.video_thumbnail.src = self.video.thumbnail_url
-            self.video_title.value = self.video.title
-            self.filename.value = self.video.title
+            self.video_thumbnail.current.src = self.video.thumbnail_url
+            self.video_title.current.value = self.video.title
+            self.filename.current.value = self.video.title
         1
     
     def build(self):
@@ -250,25 +174,107 @@ class DownloadWidget(ft.UserControl):
                 controls=
                 [
                     ft.Column(
-                        width=self.video_thumbnail.width + self.page_padding * 2,
+                        width=self.thumbnail_width + self.page_padding * 2,
                         controls=
                         [
-                            self.video_thumbnail,
-                            self.download_type_select,
+                            ft.Image(
+                                ref=self.video_thumbnail,
+                                src=None,
+                                width=self.thumbnail_width,
+                                height=self.thumbnail_height,
+                                fit=ft.ImageFit.COVER,
+                                repeat=ft.ImageRepeat.NO_REPEAT,
+                                border_radius=ft.border_radius.all(10),
+                            ),
+                            ft.Dropdown(
+                                ref=self.download_type_select,
+                                width=self.thumbnail_width,
+                                value="video",
+                                label=UIText.download_type_select_label,
+                                hint_text=UIText.download_type_select_hint,
+                                options=
+                                [
+                                    ft.dropdown.Option(
+                                    key="audio",
+                                    text=UIText.audio_download_option_text
+                                    ),
+                                    ft.dropdown.Option(
+                                        key="video",
+                                        text=UIText.video_download_option_text
+                                    )
+                                ],
+                                on_change=self.__download_type_changed,
+                            ),
                         ]
                     ),
                     ft.Column(
                         expand=1,
                         controls=
                         [
-                            self.title_row,
-                            self.file_row,
-                            self.video_download_row,
-                            self.audio_download_row,
                             ft.Row(
                                 controls=
                                 [
-                                    self.download_button,
+                                    ft.Text(
+                                        ref=self.video_title,
+                                        value=None,
+                                    ),
+                                ],
+                            ),
+                            ft.Row(
+                                controls=
+                                [
+                                    ft.TextField(
+                                        ref=self.filepath,
+                                        expand=2,
+                                        label="Введите путь к файлу",
+                                        on_change=self.__filepath_changed,
+                                        value=None
+                                    ),
+                                    ft.TextField(
+                                        ref=self.filename,
+                                        expand=1,
+                                        label="Введите название файла",
+                                        on_change=self.__filename_changed,
+                                        value=None
+                                    ),
+                                    ft.Dropdown(
+                                        ref=self.extention,
+                                        width=160,
+                                        label=UIText.download_type_select_label,
+                                        hint_text=UIText.download_type_select_hint,
+                                        options=
+                                        [
+                                            ft.dropdown.Option
+                                            (
+                                                key=extention,
+                                                text=extention.upper()
+                                            ) for extention in self.mvc_control.audio_extensions
+                                        ],
+                                    )
+                                ],
+                            ),
+                            ft.Row(
+                                ref=self.video_download_row,
+                                visible=True,
+                                controls=
+                                [
+                                ],
+                            ),
+                            ft.Row(
+                                ref=self.audio_download_row,
+                                visible=False,
+                                controls=
+                                [
+                                ],
+                            ),
+                            ft.Row(
+                                controls=
+                                [
+                                    ft.ElevatedButton(
+                                        ref=self.download_button,
+                                        text=UIText.enter_video_link,
+                                        on_click=self.__download_button_clicked
+                                    ),
                                 ],
                             )    
                         ]
@@ -288,12 +294,12 @@ class DownloadWidget(ft.UserControl):
         self.mvc_control.download(self.video)
 
     def __download_type_changed(self, e: ft.ControlEvent):
-        if self.download_type_select.value == "audio":
-            self.video_download_row.hidden = True
-            self.audio_download_row.hidden = False
-        elif self.download_type_select.value == "video":
-            self.video_download_row.hidden = False
-            self.audio_download_row.hidden = True
+        if self.download_type_select.current.value == "audio":
+            self.video_download_row.current.hidden = True
+            self.audio_download_row.current.hidden = False
+        elif self.download_type_select.current.value == "video":
+            self.video_download_row.current.hidden = False
+            self.audio_download_row.current.hidden = True
   
     def __filepath_changed(self, value):
         pass
@@ -406,6 +412,10 @@ class VideosListItem(ft.UserControl):
         self.progress_bar.bgcolor = self.progress_bar.color
         self.progress_bar.color = (0, 255, 0)
         self.progress_bar.value = 0
+        self.progress_bar.update()
+        
+    def __on_conversion_progress(self, progress: float):
+        self.progress_bar.value = progress
         self.progress_bar.update()
         
     def __on_conversion_complete(self):

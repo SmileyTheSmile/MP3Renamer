@@ -22,6 +22,7 @@ class UIText:
     download_type_select_label = "Тип файла"
     download_type_select_hint = "Скачать видео или аудио файл"
     seconds = "сек."
+    connection_failed = "Не удалось получить данные о видео."
 
 class UITextOld:
     app_name = "MP3Renamer"

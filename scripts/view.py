@@ -10,8 +10,10 @@ from flet_core.types import AnimationValue, ClipBehavior, OffsetValue, Responsiv
 
 from scripts.utilities import data_classes as data
 from scripts.utilities.strings import UIText
+from scripts.utilities.video import Video
 
-from scripts.control import MVCControl
+from scripts.control_old import MVCControl
+from scripts.control_new import VideoControl
 
 
 class MVCView:
@@ -138,6 +140,8 @@ class DownloadWidget(ft.UserControl):
     download_button = ft.Ref[ft.ElevatedButton]()
     video_download_row = ft.Ref[ft.Row]()
     audio_download_row = ft.Ref[ft.Row]()
+    errors_row = ft.Ref[ft.Row]()
+    error_display = ft.Ref[ft.Text]()
     
     def __init__(self, parent: ft.UserControl, control: MVCControl):
         super().__init__()
@@ -146,15 +150,26 @@ class DownloadWidget(ft.UserControl):
         self.mvc_control = control
         
         self.visible = False
-        
+                
     def set_video(self, link: str):
+        self.video = Video(link)
+        
+        if self.video.connect():
+            self.video_thumbnail.current.src = self.video.thumbnail_url
+            self.video_title.current.value = self.video.title
+            self.filename.current.value = self.video.title
+        else:
+            self.error_display.current.value = UIText.connection_failed
+            self.errors_row.current.visible = True
+        self.update()
+            
+    def set_video_old(self, link: str):
         self.video = self.mvc_control.get_video(link)
         
         if self.video:
             self.video_thumbnail.current.src = self.video.thumbnail_url
             self.video_title.current.value = self.video.title
             self.filename.current.value = self.video.title
-        1
     
     def build(self):
         return ft.Container(
@@ -173,6 +188,16 @@ class DownloadWidget(ft.UserControl):
                 expand=1,
                 controls=
                 [
+                    ft.Row(
+                        ref=self.errors_row,
+                        controls=
+                        [
+                            ft.Text(
+                                ref=self.error_display,
+                                value=None,
+                            ),
+                        ],
+                    ),
                     ft.Column(
                         width=self.thumbnail_width + self.page_padding * 2,
                         controls=
@@ -286,12 +311,11 @@ class DownloadWidget(ft.UserControl):
     def __download_button_clicked(self, e: ft.ControlEvent):
         self.parent.videos_list.controls.append(VideosListItem(self.video))
         self.parent.videos_list.controls.append(ft.Divider())
-        self.parent.videos_list.update()
-        
         self.visible = False
         self.update()
 
-        self.mvc_control.download(self.video)
+        self.mvc_control.add_youtube_video(self.video)
+        self.mvc_control.start_download_queue(self.video)
 
     def __download_type_changed(self, e: ft.ControlEvent):
         if self.download_type_select.current.value == "audio":
@@ -308,8 +332,8 @@ class DownloadWidget(ft.UserControl):
         pass
 
 
-class VideosListItem(ft.UserControl):
-    video: YouTube
+class VideosListItem(ft.ListView):
+    video: Video
 
     def __init__(self, video: YouTube):
         super().__init__()
@@ -394,21 +418,11 @@ class VideosListItem(ft.UserControl):
                 ]
         )
     
-    def __on_download_progress(self, stream, chunk, bytes_remaining):
-        current = (stream.filesize - bytes_remaining) / stream.filesize
-        self.progress_bar.value = current
+    def __on_download_progress(self, progress: float):
+        self.progress_bar.value = progress
         self.progress_bar.update()
-        '''
-        global download_start_time
-        seconds_since_download_start = (datetime.now()-        download_start_time).total_seconds()    
-        total_size = stream.filesize
-        bytes_downloaded = total_size - bytes_remaining
-        percentage_of_completion = bytes_downloaded / total_size * 100
-        speed = round(((bytes_downloaded / 1024) / 1024) / seconds_since_download_start, 2)    
-        seconds_left = round(((bytes_remaining / 1024) / 1024) / float(speed), 2)
-        '''
     
-    def __on_download_complete(self, stream, path):
+    def __on_download_complete(self):
         self.progress_bar.bgcolor = self.progress_bar.color
         self.progress_bar.color = (0, 255, 0)
         self.progress_bar.value = 0
@@ -421,3 +435,7 @@ class VideosListItem(ft.UserControl):
     def __on_conversion_complete(self):
         self.download_row.visible = False
         self.download_row.update()
+        
+
+class VideosList(ft.UserControl):
+    controller: VideoControl

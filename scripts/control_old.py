@@ -39,7 +39,7 @@ class MVCControl:
     def process_link(self, link: str):
         self.youtube_downloader.get_link_type(link)
     
-    def download(self, video):
+    def start_download_queue(self, video):
         self.youtube_downloader.add(video)
         if not self.youtube_downloader.downloading:
             self.youtube_downloader.start_download_queue()

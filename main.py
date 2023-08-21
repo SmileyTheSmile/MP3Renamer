@@ -1,5 +1,5 @@
 from scripts.model import MVCModel
-from scripts.control import MVCControl
+from scripts.control_old import MVCControl
 from scripts.view import MVCView
 from scripts.logger import setup_logger
 

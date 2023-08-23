@@ -1,7 +1,7 @@
 import colorlog
 
-from scripts.utilities import file_operations as f_ops
-from scripts.utilities import data_classes as data
+from scripts.old import file_operations as f_ops
+from scripts.old import data_classes as data
 
 
 logger = colorlog.getLogger(__name__)

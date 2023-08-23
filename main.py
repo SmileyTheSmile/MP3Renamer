@@ -1,16 +1,9 @@
-from scripts.model import MVCModel
-from scripts.control_old import MVCControl
-from scripts.view import MVCView
+import flet as ft
+
 from scripts.logger import setup_logger
-
-def main():
-    """https://www.pythontutorial.net/tkinter/tkinter-mvc/"""
-
-    model = MVCModel()
-    control = MVCControl(model)
-    view = MVCView(control)
+from scripts.main_page import main_page
 
 
 if __name__ == '__main__':
     setup_logger(__file__, 'assets/logging.ini')
-    main()
+    ft.app(target=main_page, assets_dir="assets")

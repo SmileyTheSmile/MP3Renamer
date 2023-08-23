@@ -1,7 +1,8 @@
 from queue import Queue, deque
 from threading import Thread
 
-from scripts.utilities.video import Video
+from scripts.video import Video
+
 
 class VideoControl:
     videos: Queue = Queue()
@@ -24,14 +25,5 @@ class VideoControl:
             
     def download_queue(self):
         while not self.videos.empty():
-            self.download(self.videos.get())
+            self.videos.get().download()
         self.downloading = False
-
-    def download(self, video: Video):
-        try:
-            video.download()
-            print("Download is completed successfully")
-        except AttributeError as error:
-            print(error)
-        except Exception as error:
-            print(f"Error while downloading: {type(error)}")

@@ -2,7 +2,7 @@ import glob
 from os import listdir
 from os.path import splitext
 
-from scripts.utilities import data_classes as data
+from scripts.old import data_classes as data
 
 def load_supported_files(directory: str, extensions: list) -> list:
     """

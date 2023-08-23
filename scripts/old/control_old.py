@@ -1,8 +1,8 @@
 import colorlog
 
-from scripts.utilities import youtube_downloader as yt
+from scripts.old import youtube_downloader as yt
 
-from scripts.model import MVCModel
+from scripts.old.model import MVCModel
 
 
 logger = colorlog.getLogger(__name__)
@@ -57,4 +57,13 @@ class MVCControl:
         song_files = tf.apply_patterns_to_list(song_files, [r"Chainsaw Man OST - \d+ - *", ""]) #r"\.mp3"])
         song_tags = mp3r.get_song_tags(song_files, default_song_tags, purification_params)
         mp3r.apply_tags_to_song_files(song_files, file_params.directory, song_tags)
+        
+        
+                                            ft.TextField(
+                                                ref=self.filename,
+                                                expand=1,
+                                                label="Введите название файла",
+                                                on_change=self.__filename_changed,
+                                                value=None
+                                            ),
         '''

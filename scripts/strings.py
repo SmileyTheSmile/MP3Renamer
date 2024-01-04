@@ -21,8 +21,9 @@ class UIText:
     enter_video_link = "Ввести"
     download_type_select_label = "Тип файла"
     download_type_select_hint = "Скачать видео или аудио файл"
-    seconds = "сек."
     connection_failed = "Не удалось получить данные о видео."
+    stream_select_label = "Выберите стрим"
+    stream_select_hint = "Выберите стрим"
 
 class UITextOld:
     app_name = "MP3Renamer"

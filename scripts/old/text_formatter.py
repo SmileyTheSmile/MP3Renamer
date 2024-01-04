@@ -3,6 +3,7 @@ import colorlog
 
 # https://regex-generator.olafneumann.org/?sampleText=Arg..mp3&flags=i&selection=3%7CCharacter,0%7CAlphanumeric%20characters
 # https://docs.python.org/3/library/re.html
+# find common substring in list of strings python
 
 logger = colorlog.getLogger(__name__)
 

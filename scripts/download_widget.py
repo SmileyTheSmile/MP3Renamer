@@ -2,13 +2,13 @@ import flet as ft
 from typing import Callable
 
 from scripts.strings import UIText
-from scripts.video import Video
+from scripts.video import VideoInfo, VideoObject
 
 
-class DownloadWidget(ft.UserControl):
-    video = Video()
+class VideoParametersMenu(ft.UserControl):
+    video = VideoInfo()
     
-    add_video_to_queue_callback: Callable
+    on_download_callback: Callable
         
     page_padding = 10
     thumbnail_width = 160
@@ -20,6 +20,7 @@ class DownloadWidget(ft.UserControl):
     filename = ft.Ref[ft.TextField]()
     extension = ft.Ref[ft.Dropdown]()
     download_button = ft.Ref[ft.ElevatedButton]()
+    streams = ft.Ref[ft.Dropdown]()
     errors_row = ft.Ref[ft.Row]()
     error_display = ft.Ref[ft.Text]()
     
@@ -29,8 +30,8 @@ class DownloadWidget(ft.UserControl):
     audio_download_row = ft.Ref[ft.Row]()
     
     def __init__(self, add_video_to_queue_callback, *args, **kwargs):
-        super(DownloadWidget, self).__init__(*args, **kwargs)
-        self.add_video_to_queue_callback = add_video_to_queue_callback
+        super(VideoParametersMenu, self).__init__(*args, **kwargs)
+        self.on_download_callback = add_video_to_queue_callback
                 
     def set_video(self, url: str):
         self.loading_ring_row.current.visible = True
@@ -65,11 +66,14 @@ class DownloadWidget(ft.UserControl):
         self.update()
         
         self.__set_video_attributes()
-        self.add_video_to_queue_callback(self.video)
+        self.on_download_callback(self.video.get_stream())
         
     def __set_video_attributes(self):
         self.video.filename = self.filename.current.value
         self.video.filepath = self.filepath.current.value
+        
+    def __stream_changed(self, e: ft.ControlEvent):
+        pass
 
     def __extension_changed(self, e: ft.ControlEvent):
         if self.extension.current.value in self.video.video_extensions:
@@ -133,6 +137,7 @@ class DownloadWidget(ft.UserControl):
                             ft.Column(
                                 width=self.thumbnail_width + self.page_padding * 2,
                                 spacing=self.page_padding * 2,
+                                alignment=ft.MainAxisAlignment.START,
                                 controls=
                                 [
                                     ft.Image(
@@ -190,6 +195,13 @@ class DownloadWidget(ft.UserControl):
                                         visible=True,
                                         controls=
                                         [
+                                            ft.Dropdown(
+                                                width=160,
+                                                ref=self.streams,
+                                                label=UIText.stream_select_label,
+                                                hint_text=UIText.stream_select_hint,
+                                                on_change=self.__stream_changed,
+                                            )
                                         ],
                                     ),
                                     ft.Row(

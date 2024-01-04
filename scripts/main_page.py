@@ -1,10 +1,10 @@
 import flet as ft
 
 from scripts.strings import UIText
-from scripts.download_widget import DownloadWidget
-from scripts.video import Video
+from scripts.download_widget import VideoParametersMenu
+from scripts.video import VideoInfo, VideoObject
 from scripts.videos_list_item import VideosListItem
-from scripts.control_new import VideoControl
+from scripts.control_new import VideosList
 
 
 def main_page(page: ft.Page):
@@ -45,22 +45,15 @@ def __appbar():
 
 
 class MainPage(ft.UserControl):
-    video_control = VideoControl()
+    link = ft.Ref[ft.TextField]()
+    download_widget = ft.Ref[VideoParametersMenu]()
+    videos_list = ft.Ref[VideosList]()
     
-    link_input = ft.Ref[ft.TextField]()
-    download_widget = ft.Ref[DownloadWidget]()
-    videos_list = ft.Ref[ft.ListView]()
-    
-    def add_video(self, video: Video):
-        self.videos_list.current.controls.append(VideosListItem(video))
-        self.videos_list.current.controls.append(ft.Divider())
-        self.videos_list.current.update()
-
-        self.video_control.add(video)
-        self.video_control.start_download()
+    def __add_video(self, video: VideoObject):
+        self.videos_list.current.add(video)
     
     def __submit_button_clicked(self, e: ft.ControlEvent):
-        self.download_widget.current.set_video(self.link_input.current.value)
+        self.download_widget.current.set_video(self.link.current.value)
 
     def build(self):
         return ft.Column(
@@ -71,7 +64,7 @@ class MainPage(ft.UserControl):
                     [
                         ft.TextField(
                             expand=1,
-                            ref=self.link_input,
+                            ref=self.link,
                             label=UIText.link_input_text,
                             value="https://youtu.be/J5EXnh53A1k"
                         ),
@@ -87,10 +80,10 @@ class MainPage(ft.UserControl):
                 ft.Row(
                     controls=
                     [
-                        DownloadWidget(
+                        VideoParametersMenu(
                             expand=1,
                             ref=self.download_widget,
-                            add_video_to_queue_callback=self.add_video,
+                            add_video_to_queue_callback=self.__add_video,
                             visible=False,
                         ),
                     ],
@@ -98,7 +91,7 @@ class MainPage(ft.UserControl):
                 ft.Row(
                     controls=
                     [
-                        ft.ListView(
+                        VideosList(
                             expand=1,
                             ref=self.videos_list,
                             spacing=10,

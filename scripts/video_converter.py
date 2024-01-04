@@ -61,7 +61,7 @@ class VideoConverter:
                 stream = ffmpeg.output(
                     video.audio,
                     out_filename,
-                    **self.metadata_factory(metadata),
+                    **metadata_factory(metadata),
                 ).global_args(
                     '-progress',
                     progress.output_file.name
@@ -73,11 +73,11 @@ class VideoConverter:
         except ffmpeg.Error as e:
             print(e.stderr)
 
-    def metadata_factory(self, metadata: dict):
-        return {
-            f'metadata:g:{i}': f"{key}={value}"
-            for i, (key, value) in enumerate(metadata.items())
-        }
+def metadata_factory(metadata: dict):
+    return {
+        f'metadata:g:{i}': f"{key}={value}"
+        for i, (key, value) in enumerate(metadata.items())
+    }
 
     
 if __name__ == "__main__":

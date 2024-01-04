@@ -1,11 +1,9 @@
 import flet as ft
   
-from scripts.video import Video
+from scripts.video import VideoInfo, VideoObject
 
 
 class VideosListItem(ft.UserControl):
-    video: Video
-    
     thumbnail = ft.Ref[ft.Image]()
     title = ft.Ref[ft.Text]()
     delete_button = ft.Ref[ft.IconButton]()
@@ -15,31 +13,42 @@ class VideosListItem(ft.UserControl):
     progress_bar = ft.Ref[ft.ProgressBar]()
     download_speed = ft.Ref[ft.Text]()
     download_row = ft.Ref[ft.Row]()
+    
+    _thumbnail: str = ""
 
-    def __init__(self, video: Video):
+    def __init__(self, thumbnail_url, ):
         super().__init__()
         
-        self.video = video
+        self._thumbnail = self.video.thumbnail_url
+        
         self.video.add_download_progress_callback(self.__on_download_progress)
         self.video.add_download_complete_callback(self.__on_download_complete)
         
-    def __on_download_progress(self, progress: float):
+    def on_download_progress(self,
+            progress: float,
+            speed: float,
+            seconds_left: float,
+        ):
         self.progress_bar.current.value = progress
+        self.download_speed.current.value = f"{speed:.2f} Mb/sec, {seconds_left:.2f} сек. осталось"
         self.progress_bar.current.update()
+        self.download_speed.current.update()
     
-    def __on_download_complete(self):
+    def on_download_complete(self):
         self.progress_bar.current.bgcolor = self.progress_bar.current.color
         self.progress_bar.current.color = (0, 255, 0)
         self.progress_bar.current.value = 0
         self.progress_bar.current.update()
+        self.download_row.current.visible = False
+        self.download_row.current.update()
         
-    def __on_conversion_progress(self, progress: float):
-        self.progress_bar.value = progress
-        self.progress_bar.update()
+    def on_conversion_progress(self, progress: float):
+        self.progress_bar.current.value = progress
+        self.progress_bar.current.update()
         
-    def __on_conversion_complete(self):
-        self.download_row.visible = False
-        self.download_row.update()
+    def on_conversion_complete(self):
+        self.download_row.current.visible = False
+        self.download_row.current.update()
 
     def build(self):
         return ft.Row(
@@ -84,11 +93,11 @@ class VideosListItem(ft.UserControl):
                             [
                                 ft.Text(
                                     ref=self.video_length,
-                                    value=self.video.formatted_length,
+                                    value="{}:{}:{}".format(*self.video.formatted_length),
                                 ),
                                 ft.Text(
                                     ref=self.filesize,
-                                    value=self.video.formatted_filesize,
+                                    value=f"{self.video.filesize_MB:.2f} MB",
                                 ),
                             ]
                         ),
@@ -103,7 +112,7 @@ class VideosListItem(ft.UserControl):
                                 ),
                                 ft.Text(
                                     ref=self.download_speed,
-                                    value=self.video.formatted_current_download_speed,
+                                    value=f"0.00 Mb/sec",
                                 )
                             ]
                         )
